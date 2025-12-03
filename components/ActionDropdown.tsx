@@ -27,6 +27,7 @@ import { Button } from "./ui/button";
 import { renameFile } from "@/lib/actions/file.action";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { FileDetails } from "./ActionModalContent";
 
 const ActionDropdown = ({ file }: { file: Models.Document }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,8 +35,8 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
   const [action, setAction] = useState<ActionType | null>(null);
   const [name, setName] = useState(file.name);
   const [isLoading, setIsLoading] = useState(false);
-  const currentPath = usePathname();
-  const router = useRouter();
+  const path = usePathname();
+
   const closeAllModals = () => {
     setIsModalOpen(false);
     setIsDropdownOpen(false);
@@ -48,8 +49,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     setIsLoading(true);
     let success = false;
     const actions = {
-      rename: () =>
-        renameFile({ fileId: file.$id, name, extension: file.extension, path: currentPath }),
+      rename: () => renameFile({ fileId: file.$id, name, extension: file.extension, path }),
       share: () => console.log("share"),
       delete: () => console.log("delete"),
     };
@@ -66,9 +66,11 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
       <DialogContent className="shad-dialog button">
         <DialogHeader className="flex flex-col gap-3">
           <DialogTitle className="text-center text-light-100">{label}</DialogTitle>
+
           {value === "rename" && (
             <Input type="text" value={name} onChange={(e) => setName(e.target.value)} />
           )}
+          {value === "details" && <FileDetails file={file} />}
         </DialogHeader>
         {["rename", "delete", "share"].includes(value) && (
           <DialogFooter className="flex flex-col gap-3 md:flex-row">

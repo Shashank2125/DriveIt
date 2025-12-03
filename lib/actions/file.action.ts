@@ -105,8 +105,8 @@ export const renameFile = async ({ fileId, name, extension, path }: RenameFilePr
     );
     //revalidate to new path and return File
     revalidatePath(path);
-    return true;
-    //return parseStringify(updateFile);
+    
+    return parseStringify(updateFile);
   } catch (error) {
     handleError(error, "Failed to rename file");
   }
