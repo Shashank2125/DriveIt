@@ -60,7 +60,16 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
 
     setIsLoading(false);
   };
-  const handleRemoveuser = () => {};
+  const handleRemoveuser = async (email: string) => {
+    const updatedEmails = emails.filter((e) => e !== email);
+    const success = await UpdateFileUsers({
+      fileId: file.$id,
+      emails: updatedEmails,
+      path,
+    });
+    if (success) setEmails(updatedEmails);
+    closeAllModals();
+  };
   const renderDialogContent = () => {
     if (!action) return null;
     const { value, label } = action;
