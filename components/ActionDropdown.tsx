@@ -24,7 +24,7 @@ import Link from "next/link";
 import { constructDownloadUrl } from "@/lib/utils";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { renameFile, UpdateFileUsers } from "@/lib/actions/file.action";
+import { deleteFile, renameFile, UpdateFileUsers } from "@/lib/actions/file.action";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { FileDetails, ShareInput } from "./ActionModalContent";
@@ -52,7 +52,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     const actions = {
       rename: () => renameFile({ fileId: file.$id, name, extension: file.extension, path }),
       share: () => UpdateFileUsers({ fileId: file.$id, emails, path }),
-      delete: () => console.log("delete"),
+      delete: () => deleteFile({ fileId: file.$id, path, bucketFileId: file.bucketFileId }),
     };
     //keyof and typeof is used to show that it can be three things of action (rename,delete and share)
     success = await actions[action.value as keyof typeof actions]();
@@ -85,6 +85,12 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
           {value === "details" && <FileDetails file={file} />}
           {value === "share" && (
             <ShareInput file={file} onInputChange={setEmails} onRemove={handleRemoveuser} />
+          )}
+          {value === "delete" && (
+            <p className="delete-confirmation">
+              Are you sure you want to delete{` `}
+              <span className="delete-file-name">{file.name}</span>
+            </p>
           )}
         </DialogHeader>
         {["rename", "delete", "share"].includes(value) && (
