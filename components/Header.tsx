@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "./ui/button";
 import Image from "next/image";
-import { Search } from "lucide-react";
+import Search from "@/components/Search";
 import FileUploader from "./FileUploader";
 import { signOutUser } from "@/lib/actions/user.action";
 
