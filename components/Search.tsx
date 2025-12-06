@@ -52,7 +52,7 @@ const Search = () => {
   };
   return (
     <div className="search">
-      <div className="search-input-wrapper">
+      <div className="search-input-wrapper ">
         <Image src="/assets/icons/search.svg" alt="Search" width={24} height={24} />
         <Input
           value={query}
@@ -61,7 +61,7 @@ const Search = () => {
           onChange={(e) => setQuery(e.target.value)}
         />
         {open && (
-          <ul className="search-results">
+          <ul className="search-result">
             {results.length > 0 ? (
               results.map((file) => (
                 <li
