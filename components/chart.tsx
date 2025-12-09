@@ -4,6 +4,7 @@ import { Label, PolarGrid, PolarRadiusAxis, RadialBar, RadialBarChart } from "re
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { calculatePercentage, convertFileSize } from "@/lib/utils";
+import { Percent } from "lucide-react";
 const chartConfig = {
   size: {
     label: "Size",
@@ -33,9 +34,40 @@ const Chart = ({ used = 0 }: { used: number }) => {
             polarRadius={[86, 74]}
           />
           <RadialBar dataKey="storage" background cornerRadius={10} />
-          <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}></PolarRadiusAxis>
+          <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
+            <Label
+              content={({ viewBox }) => {
+                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                  return (
+                    <text
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                    >
+                      <tspan x={viewBox.cx} y={viewBox.cy} className="chart-total-percentage">
+                        {used && calculatePercentage(used)
+                          ? calculatePercentage(used).toString().replace(/^0+/, "")
+                          : "0"}
+                        %
+                      </tspan>
+                      <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-white/70">
+                        Space used
+                      </tspan>
+                    </text>
+                  );
+                }
+              }}
+            />
+          </PolarRadiusAxis>
         </RadialBarChart>
       </CardContent>
+      <CardHeader className="chart-details">
+        <CardTitle className="chart-title">Available Storage</CardTitle>
+        <CardDescription className="chart-description">
+          {used ? convertFileSize(used) : "2GB"}/2GB
+        </CardDescription>
+      </CardHeader>
     </Card>
   );
 };
