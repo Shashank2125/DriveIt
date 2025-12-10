@@ -80,11 +80,11 @@ export const verifySecret = async ({
     const session = await account.createSession(accountId, password);
 
     //set that session to the cookies
-    (await cookies()).set("appwrite-session", session.secret, {
+    (await cookies()).set("appwrite-session", session.$id, {
       path: "/",
       httpOnly: true,
       sameSite: "strict",
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
     });
     //were we return sessionId for the session created
     return parseStringify({ sessionId: session.$id });
