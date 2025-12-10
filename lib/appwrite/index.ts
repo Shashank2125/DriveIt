@@ -3,6 +3,7 @@
 import { Account, Avatars, Client, Databases, Storage } from "node-appwrite";
 import { appwriteConfig } from "./config";
 import { cookies } from "next/headers";
+import { error } from "console";
 //sesson client created for acessing thier data and the action they need to perform
 //were we creating the new client for every request
 export const createSessionClient = async () => {
@@ -26,10 +27,14 @@ export const createSessionClient = async () => {
 };
 
 export const createAdminClient = async () => {
+  const apiKey = process.env.APPWRITE_API_KEY;
+  if (!apiKey) {
+    throw new Error("APPWRITE-API-KEY is missing");
+  }
   const client = new Client()
     .setEndpoint(appwriteConfig.endpointUrl)
     .setProject(appwriteConfig.projectId)
-    .setKey(appwriteConfig.secretKey);
+    .setKey(apiKey);
 
   return {
     //new account
