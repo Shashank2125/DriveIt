@@ -27,7 +27,7 @@ export const createSessionClient = async () => {
 };
 
 export const createAdminClient = async () => {
-  const apiKey = process.env.APPWRITE_API_KEY;
+  const apiKey = process.env.NEXT_APPWRITE_API_KEY;
   if (!apiKey) {
     throw new Error("APPWRITE-API-KEY is missing");
   }
